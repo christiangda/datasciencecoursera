@@ -21,7 +21,6 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
     df<-read.csv(file,header = TRUE)
     data<-rbind(data,df)
   }
-  
   # Return the mean of a column "pollutant" type
   #colMeans(data[pollutant],na.rm = TRUE, dims = 1)
   mean(as.matrix.data.frame(data[pollutant]),na.rm = TRUE)
