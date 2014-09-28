@@ -1,0 +1,17 @@
+{
+    "contents" : "best <- function(state, outcome) {\n    \n  ## Read outcome data\n  outcome_data <- read.csv(\"outcome-of-care-measures.csv\", colClasses=\"character\")\n  \n  ## Change Data type to numeric, suppress \"NA\"\n  outcome_data[, 11] <- suppressWarnings( as.numeric(outcome_data[, 11]) )\n  outcome_data[, 17] <- suppressWarnings( as.numeric(outcome_data[, 17]) )\n  outcome_data[, 23] <- suppressWarnings( as.numeric(outcome_data[, 23]) )\n  outcome_data <- na.omit( outcome_data )\n                   \n  ## Check that state and outcome are valid\n  \n  ## Valid States: 2-characters Names\n  states <- c(outcome_data$State)  \n  if(!(state %in% states))\n    stop(\"invalid state\")\n  \n  ## Valid Outcomes:  Only three \"heart attack\", \"heart failure\", \"pneumonia\"\n  outcomes <- list(\"heart attack\"=11, \"heart failure\"=17, \"pneumonia\"=23)\n  if(!(outcome %in% names(outcomes)))\n    stop(\"invalid outcome\")  \n  \n  ## Return hospital name in that state with lowest 30-day death\n  ## rate\n  state_data <- subset(outcome_data, State == state)\n  state_data <- state_data[ order(state_data[,outcomes[[outcome]]], na.last = TRUE),c(\"Hospital.Name\")]\n  state_data <- na.omit(state_data)\n  state_data[1]\n}",
+    "created" : 1411841542599.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3979481760",
+    "id" : "DF947798",
+    "lastKnownWriteTime" : 1411853687,
+    "path" : "~/Documents/Coursera/R Programming/Week 4/Programming Assignment 3/best.R",
+    "project_path" : "best.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : true,
+    "type" : "r_source"
+}

@@ -1,0 +1,17 @@
+{
+    "contents" : "rankall <- function(outcome, num = \"best\") {\n\n  ## Read outcome data\n  outcome_data <- read.csv(\"outcome-of-care-measures.csv\", colClasses=\"character\")\n  \n  ## Change Data type to numeric, suppress \"NA\"\n  outcome_data[, 11] <- suppressWarnings( as.numeric(outcome_data[, 11]) )\n  outcome_data[, 17] <- suppressWarnings( as.numeric(outcome_data[, 17]) )\n  outcome_data[, 23] <- suppressWarnings( as.numeric(outcome_data[, 23]) )\n  \n  ## Check that outcome are valid\n  \n  ## Valid Outcomes:  Only three \"heart attack\", \"heart failure\", \"pneumonia\"\n  outcomes <- list(\"heart attack\"=11, \"heart failure\"=17, \"pneumonia\"=23)\n  if(!(outcome %in% names(outcomes)))\n    stop(\"invalid outcome\")\n  \n  \n  ## For each state, find the hospital of the given rank\n  ## Return a data frame with the hospital names and the\n  ## (abbreviated) state name\n  outcome_col_name <- colnames(outcome_data)[outcomes[[outcome]]]\n  data_cols <- c(\"Hospital.Name\", \"State\", outcome_col_name)\n  \n  data_states <- split(outcome_data[,data_cols],\n                       outcome_data[\"State\"])\n  \n  ## Ordering data.frame data base on Rank and column\n  rank_order <- function(states_list, num, column_to_order){\n    \n    data <- order(states_list[column_to_order],\n                  states_list[\"Hospital.Name\"], \n                  na.last = NA)\n    #data <- na.omit(data)\n    \n    ## Valid num: best = 1, worst = lenght(outcome_data)\n    if(num == \"best\"){\n      num <- as.numeric(1)\n    } else if(num == \"worst\"){\n      num <- as.numeric(length(data))\n    } else if(as.numeric(num)){\n      num <- as.numeric(num)\n    } else {\n      stop(\"invalid num\")\n    }\n    #Return Hospital Name from Index\n    states_list$Hospital.Name[data[num]]\n  }  \n  \n  #Apply rank_order function to list data_states\n  data_states_ranked <-lapply(data_states,rank_order, num, outcome_col_name)\n  \n  hospital <- unlist(data_states_ranked)\n  state <- names(data_states_ranked)\n  \n  data.frame(hospital, state, row.names = state)\n  \n}",
+    "created" : 1411858424617.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2565264180",
+    "id" : "9E2D69DF",
+    "lastKnownWriteTime" : 1411863935,
+    "path" : "~/Documents/Coursera/R Programming/Week 4/Programming Assignment 3/rankall.R",
+    "project_path" : "rankall.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : true,
+    "type" : "r_source"
+}
